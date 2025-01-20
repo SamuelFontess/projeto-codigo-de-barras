@@ -15,11 +15,11 @@ bool verificar_codigo_barras(ImagemPBM *imagem, char *codigo_barras) {
     int largura = imagem->largura;
     int altura = imagem->altura;
 
-    // Find the actual code region by detecting the first and last black pixels
+    // Encontre a região de código real detectando o primeiro e o último pixels pretos
     int inicio_x = -1, fim_x = -1;
-    int linha_media = altura / 2;  // Use middle row for better detection
+    int linha_media = altura / 2;  // Use a linha do meio para melhor detecção
     
-    // Find start and end positions
+    // Encontre as posições inicial e final
     for (int x = 0; x < largura; x++) {
         if (imagem->pixels[linha_media][x] == 1) {
             if (inicio_x == -1) inicio_x = x;
@@ -29,17 +29,17 @@ bool verificar_codigo_barras(ImagemPBM *imagem, char *codigo_barras) {
 
     if (inicio_x == -1 || fim_x == -1) return false;
 
-    // Calculate width per bit based on the total width of the code
+    // Calcule a largura por bit com base na largura total do código
     double largura_bit = (double)(fim_x - inicio_x + 1) / TAM_CODIGO;
 
-    // Read each bit using the calculated width
+    // Leia cada bit usando a largura calculada
     for (int i = 0; i < TAM_CODIGO; i++) {
         int x_inicio = inicio_x + (int)(i * largura_bit);
         int x_fim = inicio_x + (int)((i + 1) * largura_bit);
         
         int pretos = 0, total = 0;
         for (int x = x_inicio; x < x_fim; x++) {
-            for (int y = altura/4; y < (3*altura)/4; y++) {  // Use middle 50% of height
+            for (int y = altura/4; y < (3*altura)/4; y++) {  // Use 50% da altura
                 total++;
                 if (imagem->pixels[y][x] == 1) pretos++;
             }
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Using binary mode for stdout to avoid encoding issues
+    // Usando binário para stdout para evitar problemas de codificação
     #ifdef _WIN32
     _setmode(_fileno(stdout), _O_BINARY);
     #endif
