@@ -1,4 +1,3 @@
-// codigo_barras.c
 #include "codigo_compartilhado.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,22 +60,32 @@ bool decodificar_codigo_barras(const char *codigo_barras, char *identificador) {
     const char *l_code[] = L_CODE;
     const char *r_code[] = R_CODE;
 
+    // Decodificar dígitos esquerdos
     for (int i = 0; i < 4; i++) {
+        bool found = false;
         for (int j = 0; j < 10; j++) {
             if (strncmp(&codigo_barras[3 + i * 7], l_code[j], 7) == 0) {
                 identificador[i] = '0' + j;
+                found = true;
                 break;
             }
         }
+        if (!found) return false;
     }
+
+    // Decodificar dígitos direitos
     for (int i = 0; i < 4; i++) {
+        bool found = false;
         for (int j = 0; j < 10; j++) {
-            if (strncmp(&codigo_barras[32 + i * 7], r_code[j], 7) == 0) {
+            if (strncmp(&codigo_barras[36 + i * 7], r_code[j], 7) == 0) {
                 identificador[4 + i] = '0' + j;
+                found = true;
                 break;
             }
         }
+        if (!found) return false;
     }
+
     identificador[8] = '\0';
     return true;
 }
