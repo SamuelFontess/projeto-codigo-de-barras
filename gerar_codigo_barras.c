@@ -41,6 +41,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    // Verificar se o arquivo já existe
+    FILE *arquivo_existente = fopen(nome_arquivo, "r");
+    if (arquivo_existente != NULL) {
+        fclose(arquivo_existente);
+        char resposta;
+        printf("O arquivo %s já existe. Deseja sobrescrevê-lo? (s/n): ", nome_arquivo);
+        scanf(" %c", &resposta);
+        if (resposta != 's' && resposta != 'S') {
+            fprintf(stderr, "Erro: arquivo resultante já existe.\n");
+            return 1;
+        }
+    }
+
     char codigo_barras[TAM_CODIGO + 1];
     codificar_identificador(identificador, codigo_barras);
 

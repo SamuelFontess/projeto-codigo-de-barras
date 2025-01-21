@@ -1,4 +1,3 @@
-// codigo_barras.h
 #ifndef CODIGO_BARRAS_H
 #define CODIGO_BARRAS_H
 
